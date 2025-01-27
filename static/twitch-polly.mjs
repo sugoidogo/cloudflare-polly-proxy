@@ -210,11 +210,11 @@ export class Polly {
         }
     }
 
-    DescribeVoices(Engine = 'standard', LanguageCode = '', IncludeAdditionalLanguageCodes = true) {
-        return DescribeVoices(this.#GetAuthHeaders(), Engine, LanguageCode, IncludeAdditionalLanguageCodes)
+    async DescribeVoices(Engine = 'standard', LanguageCode = '', IncludeAdditionalLanguageCodes = true) {
+        return DescribeVoices(await this.#GetAuthHeaders(), Engine, LanguageCode, IncludeAdditionalLanguageCodes)
     }
 
-    SynthesizeSpeech(
+    async SynthesizeSpeech(
         Text,
         VoiceId,
         TextType = 'text',
@@ -223,7 +223,7 @@ export class Polly {
         OutputFormat = 'mp3',
         SampleRate = '24000') {
         return SynthesizeSpeech(
-            this.#GetAuthHeaders(),
+            await this.#GetAuthHeaders(),
             Text,
             VoiceId,
             TextType,
