@@ -188,3 +188,49 @@ export function SynthesizeSpeech(
     }
 
 export default SynthesizeSpeech
+
+export class Polly {
+
+    /** @type {import('@twurple/auth').AuthProvider} */
+    #auth_provider = null;
+
+    /**
+     * 
+     * @param {import('@twurple/auth').AuthProvider} auth_provider 
+     */
+    constructor(auth_provider) {
+        this.#auth_provider = auth_provider
+    }
+
+    async #GetAuthHeaders() {
+        const token = await this.#auth_provider.getAccessTokenForUser()
+        return {
+            'authorization': 'OAuth ' + token.access_token,
+            'client-id': this.#auth_provider.client_id
+        }
+    }
+
+    DescribeVoices(Engine = 'standard', LanguageCode = '', IncludeAdditionalLanguageCodes = true) {
+        return DescribeVoices(this.#GetAuthHeaders(), Engine, LanguageCode, IncludeAdditionalLanguageCodes)
+    }
+
+    SynthesizeSpeech(
+        Text,
+        VoiceId,
+        TextType = 'text',
+        Engine = 'standard',
+        LanguageCode = '',
+        OutputFormat = 'mp3',
+        SampleRate = '24000') {
+        return SynthesizeSpeech(
+            this.#GetAuthHeaders(),
+            Text,
+            VoiceId,
+            TextType,
+            Engine,
+            LanguageCode,
+            OutputFormat,
+            SampleRate
+        )
+    }
+}
