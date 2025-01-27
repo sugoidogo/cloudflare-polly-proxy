@@ -1,4 +1,15 @@
 /**
+ * @typedef {Object} Voice
+ * @property {Array<String> | null} AdditionalLanguageCodes
+ * @property {String} Gender
+ * @property {String} Id
+ * @property {String} LanguageCode
+ * @property {String} LanguageName
+ * @property {String} Name
+ * @property {Array<String>} SupportedEngines
+ */
+
+/**
 Returns the list of voices that are available for use when requesting speech synthesis.
 Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name.
 
@@ -20,7 +31,7 @@ For instance, if you request all languages that use US English (es-US),
 and there is an Italian voice that speaks both Italian (it-IT) and US English,
 that voice will be included if you specify yes but not if you specify no.
 @param {dict} auth_headers your application's authorization headers used when making Twitch API requests
-@returns {Promise<Array>} An array of dicts with the following properties:
+@returns {Promise<Array<Voice>} An array of dicts with the following properties:
 
 Gender (string) – Gender of the voice.
 
