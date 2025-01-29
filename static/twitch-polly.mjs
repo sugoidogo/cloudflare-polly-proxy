@@ -153,37 +153,12 @@ export function SynthesizeSpeech(
     SampleRate='24000'){
         console.debug('synthesize_speech():',Text)
         if(TextType=='ssml'){
-            const openSpeak=/^< *speak *>/ig
-            const closeSpeak=/< *\/ *speak *>$/ig
-            if(!openSpeak.test(Text)){
+            if(!Text.startsWith('<speak>')){
                 Text='<speak>'+Text
             }
-            if(!closeSpeak.test(Text)){
+            if(!Text.endsWith('</speak>')){
                 Text+='</speak>'
             }
-            // /(?<=< *)($1)(?= *>)/ig
-            const replacements={
-                '<lang xml:lang=':/< *lang *=/ig,
-                '<prosody $1=':/< *(volume|rate|pitch|max-duration) *=/ig,
-                '</prosody>':/< *\/ *(volume|rate|pitch|max-duration) *>/ig,
-                '<say-as interpret-as=':/< *(interpret-as|say-as) *=/ig,
-                '</say-as>':/< *\/ *interpret-as *>/ig,
-                '<sub alias=':/< *(alias|sub) *=/ig,
-                '</sub>':/< *\/ *alias *>/ig,
-                '<w role=':/< *role *=/ig,
-                '<domain name="news">':/< *news *>/ig,
-                '</domain>':/< *\/ *news *>/ig,
-                'effect=$1':/(?<=< *)(drc|whispered)(?= *>)/ig,
-                '<effect name=':/< *effect *=/ig,
-                'effect phonation="soft"':/(?<=< *)(soft)(?= *>)/ig,
-                'effect vocal-tract-length':/(?<=< *)(vocal-tract-length)(?= *=)/ig,
-                'amazon:$1':/(?<=<.*= *"? *)(VBD|VB|DT|IN|JJ|NN|DEFAULT|SENSE_1)(?=.*>)/ig,
-                'amazon:$1':/(?<=<.*)(?<!amazon:)(max-duration|breath|auto-breaths|domain|effect)(?=.*>)/ig,
-            }
-            for(const key in replacements){
-                Text=Text.replaceAll(replacements[key],key)
-            }
-            console.debug(Text)
         }
         const url=new URL('/v1/speech',import.meta.url)
         url.search=new URLSearchParams({
